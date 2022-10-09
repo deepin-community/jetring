@@ -1,0 +1,19 @@
+.\" -*- nroff -*-
+.TH JETRING-GEN 1 "" "" "jetring commands"
+.SH NAME
+jetring-gen \- generates changesets for changes between two keyrings
+.SH SYNOPSIS
+.B jetring-gen oldring.gpg newring.gpg [comment]
+.SH DESCRIPTION
+If you have two keyrings, one being an old version of the other, this
+command can generate a sequence of changesets that, when applied to the old
+keyring with jetring-apply, should generate the new keyring.
+.PP
+The optional comment parameter is a comment to put in each changeset.
+.PP
+The names of the generated changesets will be output to stdout.
+.SH AUTHOR 
+Joey Hess, <joey@kitenet.net>.
+.SH "SEE ALSO"
+.BR jetring (7)
+.BR jetring-apply (1)

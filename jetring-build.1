@@ -1,0 +1,21 @@
+.\" -*- nroff -*-
+.TH JETRING-BUILD 1 "" "" "jetring commands"
+.SH NAME
+jetring-build \- applies changesets to produce a keyring
+.SH SYNOPSIS
+.B jetring-build [-i|-I] keyring.gpg dir
+.SH DESCRIPTION
+Applies the changesets in the specified jetring directory in order, to
+produce a keyring.
+.SH OPTIONS
+.TP
+.B -i
+Only applies changesets added since the last time it was run.
+.TP
+.B -I
+Applies changesets incrementally if the keyring exists, otherwise does a
+full rebuild.
+.SH AUTHOR 
+Joey Hess, <joey@kitenet.net>.
+.SH "SEE ALSO"
+.BR jetring (7)

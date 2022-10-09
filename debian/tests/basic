@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+
+ring="${AUTOPKGTEST_ARTIFACTS}/ring"
+
+jetring-explode /usr/share/keyrings/debian-archive-keyring.gpg "$ring"

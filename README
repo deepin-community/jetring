@@ -1,0 +1,10 @@
+Maintenance of gpg keyrings using changesets.
+
+sample.changeset contains the three most common types of changes that
+constitute a changeset.
+
+See jetring(7) for documentation.
+
+Unless otherwise noted, all files are Copyright 2007 Joey Hess
+<joey@kitenet.net> and are licensed under the terms of the GNU GPL version
+2 or greater.

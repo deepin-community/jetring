@@ -1,0 +1,13 @@
+#!/bin/sh
+
+changesetdir="$1"
+
+if [ -z "$changesetdir" ]; then
+	echo "Usage: jetring-signindex dir" >&2
+	exit 1
+fi
+
+GNUPGHOME=
+
+rm -f "$changesetdir/index.gpg"
+gpg -a --detach-sign --output "$changesetdir/index.gpg" --sign "$changesetdir/index"

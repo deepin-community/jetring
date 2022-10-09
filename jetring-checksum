@@ -1,0 +1,70 @@
+#!/usr/bin/perl
+use warnings;
+use strict;
+use Getopt::Long;
+
+sub usage {
+	die "usage: jetring-checksum [-ug] dir\n";
+}
+
+my $upgrade=0;
+GetOptions(
+	"-u", \$upgrade,
+) || usage;
+
+usage() unless @ARGV;
+my $dir=shift;
+
+chdir($dir) || die "chdir $dir: $!";
+
+open (INDEX, "<", "index") || die "$dir/index: $!";
+if ($upgrade) {
+	open (OUT, ">", "index.new") || die "$dir/index.new: $!";
+}
+while (<INDEX>) {
+	chomp;
+	if (/^([a-zA-Z0-9]+)+\s+(.*)$/) {
+		runcheck($_, "sha1sum", "-c", "-w");
+		if ($upgrade) {
+			print OUT genchecksum($2);
+		}
+	}
+	elsif (/^(\w+)-(.*\s+.*)/) {
+		my $type=$1;
+		my $rest=$2;
+		if ($type=~/^sha(1|256|224|384|512)$/) {
+			runcheck($rest, $type."sum", "-c", "-w")
+		}
+		else {
+			die "unsupported checksum type \¨$type\" in $dir/index\n";
+		}
+		if ($upgrade) {
+			print OUT $_."\n";
+		}
+	}
+	else {
+		die "invalid line in $dir/index: $_\n";
+	}
+}
+close INDEX;
+if ($upgrade) {
+	close OUT;
+	rename("index.new", "index") || die "rename: $!";
+}
+
+sub runcheck {
+	my $line=shift;
+	my $command=shift;
+	close STDOUT;
+	open(STDOUT, ">/dev/null");
+	open (PROG, "|-", $command, @_) || die "error running $command: $!";
+	print PROG $line."\n" || die "$command did not read line";
+	close PROG || die "$dir/index contains bad checksum!\n";
+}
+
+sub genchecksum {
+	my $file=shift;
+	my $checksum=`sha256sum '$file'`;
+	chomp $checksum;
+	return "sha256-$checksum\n";
+}

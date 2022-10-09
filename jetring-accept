@@ -1,0 +1,53 @@
+#!/bin/sh
+# Accepts a changeset, adding it to a directory and an index file.
+set -e
+
+if [ -z "$1" ] || [ -z "$2" ]; then
+	echo "Usage: jetring-accept changesetdir changeset" >&2
+	exit 1
+fi
+
+# avoid gnupg touching ~/.gnupg
+GNUPGHOME=$(mktemp -d -t jetring.XXXXXXXX)
+export GNUPGHOME
+trap cleanup exit
+cleanup () {
+	rm -rf "$GNUPGHOME"
+}
+
+changesetdir="$1"
+changeset="$2"
+
+if [ -n "$JETRING_SIGN" ] && [ -e "$changesetdir/index" ]; then
+	JETRING_SIGN=$(readlink -f "$JETRING_SIGN")
+	gpg --no-auto-check-trustdb --options /dev/null \
+		--no-default-keyring --keyring "$JETRING_SIGN" \
+		--verify "$changesetdir/index.gpg" "$changesetdir/index"
+fi
+
+mkdir -p "$changesetdir"
+touch "$changesetdir/index"
+
+basename=$(basename "$changeset")
+sha1sum=$(sha1sum "$changeset" | cut -d " " -f 1)
+checksum=sha256-$(sha256sum "$changeset" | cut -d " " -f 1)
+
+if grep "^$checksum " "$changesetdir/index" || 
+   grep "^$sha1sum " "$changesetdir/index"; then
+	echo "This changeset is already included." >&2
+	exit 1
+fi
+
+c=1
+origbasename="$basename"
+while [ -e "$changesetdir/$basename" ]; do
+	c=$(expr "$c" + 1)
+	basename="$origbasename.$c"
+done
+
+echo "$checksum  $basename" >> "$changesetdir/index"
+mv "$changeset" "$changesetdir/$basename"
+
+if [ -n "$JETRING_SIGN" ] || [ -e "$changesetdir/index.gpg" ] ; then
+	jetring-signindex "$changesetdir"
+fi

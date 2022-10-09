@@ -1,0 +1,247 @@
+jetring (0.30) unstable; urgency=medium
+
+  * QA upload.
+
+  [ Debian Janitor ]
+  * Apply multi-arch hints.
+    + jetring: Add Multi-Arch: foreign.
+
+ -- Jelmer Vernooĳ <jelmer@debian.org>  Mon, 01 Feb 2021 22:14:12 +0000
+
+jetring (0.29) unstable; urgency=medium
+
+  * QA upload.
+  * debian/control:
+      - Added the Rules-Requires-Root field.
+      - Bumped Standards-Version to 4.4.0.
+  * debian/copyright: updated the packaging copyright years.
+  * debian/tests/control: Fixed a mistake in the field 'Restrictions'.
+  * Using new DH level format. Consequently:
+      - debian/compat: removed.
+      - debian/control: changed from 'debhelper' to 'debhelper-compat' in
+        Build-Depends field and bumped level to 12.
+
+ -- Thiago Andrade Marques <thmarques@gmail.com>  Mon, 23 Sep 2019 23:10:09 -0300
+
+jetring (0.28) unstable; urgency=medium
+
+  * QA upload.
+  * Fix autopkgtest by allowing stderr
+
+ -- Paul Gevers <elbrus@debian.org>  Sat, 21 Sep 2019 15:40:54 +0200
+
+jetring (0.27) unstable; urgency=medium
+
+  * QA upload.
+  * Set Debian QA Group as maintainer. (see #893063)
+  * Switch VCS URLs to salsa.debian.org
+
+ -- Giovani Augusto Ferreira <giovani@debian.org>  Thu, 15 Mar 2018 22:31:36 -0300
+
+jetring (0.26) unstable; urgency=medium
+
+  [ Daniel Kahn Gillmor ]
+  * Standards-Version: bump to 4.0.0 (no changes needed)
+  * Homepage: update to preferred URL
+  * d/copyright: use https, provide upstream info
+  * wrap-and-sort -ast for cleaner diffs
+  * enable easier backporting
+  * drop unnecessary build-dep on dpkg-dev
+  * simplify building with git-buildpackage
+  * correct NAME for jetring-explode(1)
+  * add a basic autopkgtest
+  * use machine-readable form for jetring-explode
+
+  [ Giovani Augusto Ferreira ]
+  * Updated my email address
+  * Bumped Standards-Version to 4.1.3
+  * Bumped DH level to 11
+  * d/changelog: removed useless trailing whitespace
+
+ -- Giovani Augusto Ferreira <giovani@debian.org>  Tue, 13 Mar 2018 18:41:07 -0300
+
+jetring (0.25) unstable; urgency=medium
+
+  * Bumped DH level to 10.
+  * debian/control:
+      - Bumped Standards-Version to 3.9.8.
+
+ -- Giovani Augusto Ferreira <giovani@riseup.net>  Sat, 17 Dec 2016 00:38:35 -0200
+
+jetring (0.24) unstable; urgency=medium
+
+  * debian/control:
+     - Added Vcs-* fields to new repository in collab-maint.
+
+ -- Giovani Augusto Ferreira <giovani@riseup.net>  Thu, 07 Apr 2016 21:12:02 -0300
+
+jetring (0.23) unstable; urgency=medium
+
+  * Upload to unstable.
+  * Migrations:
+     - DH level to 9.
+     - DebSrc to 3.0 format.
+  * debian/control:
+     - Removed section field duplicate.
+     - Romoved old Vcs-Git, repository with access denied error.
+  * debian/copyright:
+     - Updated the GPL-2+ text.
+     - Added my name at debian/* block.
+
+ -- Giovani Augusto Ferreira <giovani@riseup.net>  Thu, 03 Mar 2016 06:04:30 -0300
+
+jetring (0.22) experimental; urgency=medium
+
+  * New maintainer. Thanks to Joey Hess. (Closes: #768525)
+  * debian/control:
+     - Bumped Standards-Version to 3.9.7.
+
+ -- Giovani Augusto Ferreira <giovani@riseup.net>  Wed, 02 Mar 2016 15:28:13 -0300
+
+jetring (0.21) unstable; urgency=medium
+
+  * Set maintainer to Debian QA group.
+
+ -- Joey Hess <joeyh@debian.org>  Sat, 08 Nov 2014 00:10:56 -0400
+
+jetring (0.20) unstable; urgency=low
+
+  * Typo. Closes: #610870
+
+ -- Joey Hess <joeyh@debian.org>  Fri, 04 Nov 2011 17:06:55 -0400
+
+jetring (0.19) unstable; urgency=low
+
+  * Add missing gnupg build dep. Closes: #576795
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 07 Apr 2010 12:39:18 -0400
+
+jetring (0.18) unstable; urgency=low
+
+  * Fix new Makefile to use jetring utilities, not rely
+    on it being in PATH. Closes: #545629
+
+ -- Joey Hess <joeyh@debian.org>  Tue, 08 Sep 2009 13:06:43 -0400
+
+jetring (0.17) unstable; urgency=low
+
+  * jetring-diff: Fix incorrect display of changes to last key in keyring
+    when adding a new key. Closes: #542467  Thanks, Matthijs Kooijman
+  * Add a Makefile and simplify rules file using debhelper overrides.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 24 Aug 2009 14:24:31 -0400
+
+jetring (0.16) unstable; urgency=low
+
+  * jetring-accept: Avoid adding a duplicate sha256- prefix.
+    Closes: #529557
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 20 May 2009 01:17:19 -0400
+
+jetring (0.15) unstable; urgency=low
+
+  * jetring-checksum: New command that is used to verify the checksums
+    in index files. Supports checking sha1-sha512 checksums.
+  * Switched to using sha1 to using sha256 checksums when adding
+    changesets to the index file.
+  * jetring-checksum -u: Can be used to upgrade sha1 checksums in
+    a legacy index file to sha256 checksums.
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 06 May 2009 19:25:48 -0400
+
+jetring (0.14) unstable; urgency=low
+
+  * Use debhelper v7, rules file minimisation.
+
+ -- Joey Hess <joeyh@debian.org>  Tue, 22 Jul 2008 00:20:30 -0400
+
+jetring (0.13) unstable; urgency=low
+
+  * Convert copyright file to new format.
+  * Credit aj in copyright file. Closes: #474552
+    (source location is already in the control file)
+
+ -- Joey Hess <joeyh@debian.org>  Sat, 19 Apr 2008 16:47:57 -0400
+
+jetring (0.12) unstable; urgency=low
+
+  * Typo. Closes: #455258
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 20 Dec 2007 15:41:14 -0500
+
+jetring (0.11) unstable; urgency=low
+
+  * Fix breakage introduced by last patch.
+
+ -- Joey Hess <joeyh@debian.org>  Tue, 27 Nov 2007 01:44:47 -0500
+
+jetring (0.10) unstable; urgency=low
+
+  * jetring-diff: Order lines in the diff to make clear if a signature
+    is added/removed from a subkey, or from the main uid. Previously,
+    signatures were always shown at the end.
+    Patch from Jonathan McDowell. Closes: #452641
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 25 Nov 2007 14:02:00 -0500
+
+jetring (0.09) unstable; urgency=low
+
+  * Jetring is now maintained in a git repository.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 28 Oct 2007 13:47:47 -0400
+
+jetring (0.08) unstable; urgency=low
+
+  * Set GNUPGHOME to a temporary directory in all commands that use gpg,
+    to avoid ever writing to or requiring ~/.gnupg.
+    (The one exception is jetring-signindex.)
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 17 Oct 2007 14:13:54 -0400
+
+jetring (0.07) unstable; urgency=low bond=James_Bond
+
+  * Added man pages for all the commands.
+
+ -- Joey Hess <joeyh@debian.org>  Sat, 29 Sep 2007 02:17:47 -0400
+
+jetring (0.06) unstable; urgency=low
+
+  * jetring-apply, jetring-review: Improve cleanup of temp files in error
+    conditions.
+
+ -- Joey Hess <joeyh@debian.org>  Sat, 22 Sep 2007 18:33:50 -0400
+
+jetring (0.05) unstable; urgency=low
+
+  * Fix ignoring of sigpipe, silly perl.
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 12 Sep 2007 17:27:57 -0400
+
+jetring (0.04) unstable; urgency=low
+
+  * svn reorganisation, changed to svn://svn.debian.org/jetring/trunk/jetring
+  * jetring-accept and jetring-explode will automatically sign the index file
+    if it was signed previously, even if the user forgot to set JETRING_SIGN
+  * Ignore SIGPIPE in jetring-apply/review, this seems to happen legitimately
+    sometimes when removing a key from a keyring.
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 12 Sep 2007 17:18:04 -0400
+
+jetring (0.03) unstable; urgency=low
+
+  * Apply a patch from John Wright to allow jeyring-apply to delete a key
+    w/o a tty.
+
+ -- Joey Hess <joeyh@debian.org>  Fri, 01 Jun 2007 19:28:30 -0400
+
+jetring (0.02) unstable; urgency=low
+
+  * Updates for 822-date deprecation.
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 22 Mar 2007 17:39:16 -0400
+
+jetring (0.01) unstable; urgency=low
+
+  * Initial debianisation. Still needs man pages, I know; see README for now.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 18 Mar 2007 20:35:12 -0400

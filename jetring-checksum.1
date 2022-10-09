@@ -1,0 +1,19 @@
+.\" -*- nroff -*-
+.TH JETRING-CHECKSUM 1 "" "" "jetring commands"
+.SH NAME
+jetring-checksum \- manage checksums in jetring index file
+.SH SYNOPSIS
+.B jetring-checksum [-u] dir
+.SH DESCRIPTION
+This command manages checksums in a jetring index file. By default, it
+checks that each checksum listed in the index file matches the checksum
+of the changeset file in the jetring directory.
+.P
+If the -u option is specified, it will upgrade the checksums in the index
+file. Older versions of jetring used sha1 checksums, and while those are
+still supported, sha256 checksums are now preferred.
+to get signed.
+.SH AUTHOR 
+Joey Hess, <joey@kitenet.net>.
+.SH "SEE ALSO"
+.BR jetring (7)

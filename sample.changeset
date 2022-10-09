@@ -1,0 +1,50 @@
+Changed-By: Joey Hess <joeyh@debian.org>
+Date: Sun, 25 Feb 2007 01:17:56 -0500
+Comment: Removing an old email address.
+Action: edit-key 788A3F4C
+Data:
+  uid 3
+  deluid
+  y
+  save
+
+Changed-By: Joey Hess <joeyh@debian.org>
+Comment: Joey also wants to have two keys in the keyring, here's the new one.
+Date: Sun, 25 Feb 2007 01:17:56 -0500
+Action: import
+Data:
+  -----BEGIN PGP PUBLIC KEY BLOCK-----
+  Version: GnuPG v1.4.6 (GNU/Linux)
+  
+  mQGiBEXfns0RBACaKfCKEA7O+K10XSkxmVj/CxQovoHoQlplw/2PJdvfvPRXtQVB
+  P6RYl7dShpZ1hT9kbcxuTbriGPjA10WP0kbg36TJ4xbddk4oXJVjpVt51AaP9Ac3
+  bdWd2LeCnizUyazUWoZl+ulzenFod1J8drwPs6MGvKUMZEYMKprhgnaQxwCg4AcS
+  mpUu3iA/3kDs9GGB7HUPH5sEAJR0N5GH+Kk6D36fsV13KtijYVK9sAygKXfcCW13
+  nXvssNNcrR9aBCel7ZkPtIGM4tW6kNXJXUyzIfFmKHVKYbSjSeKSMAiaDNfIOwBi
+  XA9dgFcPCVQ/Dz+zAs+qo/imnqBohrFOMsBgcP52lZzCYBv7GjGNk9dPjYEyrqul
+  olYAA/4kJj+LHmBMCyrOFvTOxuiMbazPAbxOQtyGS4W9Kq0/zNZUIjXd0mG68w0z
+  bTbBk2xmlll+4HSc/wbSdsm/ehbSreyp7q8nzq0fK1AQ7t/e2MPunt+ayanB9KXl
+  08aI5zx93LDatAd1RIYzc1u/R+tk3ks8ViC3+sdWfo1lOkhlcrQYc29zb3NvcyA8
+  c3Nvc29Aa2l0aXRpdHQ+iGAEExECACAFAkXfns0CGwMGCwkIBwMCBBUCCAMEFgID
+  AQIeAQIXgAAKCRD/fMTh/I6hNFi/AJ9Oc2ZxjnQhPJ4lANYQEMqaVa/8ogCdFiXm
+  zibrof8Wb+Sn8wXgg0XnYQa5Ag0ERd+e8RAIAJQd/dve6IqN0UnCeTd85IFzMmMG
+  9ExrZx/Nm4MczYcQRC9KsiBus1UFY6XImq1Z9F13B8pr0qE3YaBBA7c979fy9qDf
+  bJ9D1jixhAU1vLasH9pTkwBN2Hvd5/Nm1wlMv06Kzsceb3EmgCHF716dmlYzia+0
+  v9cVdpZrc6G3jfDSvLGmNbmIHmXJM5Mia+k7SzJdKSjjcun94YzeIiM4iRGj3S88
+  3wtll9Mr08lexYuu3xC7SK2bM0PZaC2E3qshLhXLmjaoS9m9zinhg43g8WCXE0c6
+  X/ePf9dxIgxaF/TkReOpgZ+W6okkyyDVjGdC8ldoyKBpe20YV9x96V+77qsAAwUH
+  /j1MC9Qp44y/KYthuoUxTffTeGdAkSsCsoGPiilLRE5HB3KiWhrr9oPq/6hvM+Bk
+  92mCdh1FVsIOmLkSrQ54y2kA3Iu8MdvHveu6nrhQIHPY+6AJVvkN/zL8h1H/+igu
+  sCqQyyXph+cXRK8ZMwke+fkp7TqOMtXyjCn9i5RekI/S9xfbWW2zFKc9QXsyyfc3
+  bm2pTtaNQEkpgfBFSNrrHmgTH8ES/lOoinnfKrVz8me9iO/JK/hh6I7XigIsGbtH
+  hLmwzyOD9IvD+QEDSmPWOTO0K3efrrSBS/aFtAYlKtx5creJgdcfobpD0Ugvlykq
+  y2mr6UrU3ucQJ3/hdVlqR+eISQQYEQIACQUCRd+e8QIbDAAKCRD/fMTh/I6hNL/M
+  AKC+/JPLSXz2wauck429Zv5pVN7geACfZLznlUiaJuGuMMLUs+T4bDej03s=
+  =TNPZ
+  -----END PGP PUBLIC KEY BLOCK-----
+
+Changed-By: Joey Hess <joeyh@debian.org>
+Comment: On second thought, that new key is no good
+Date: Sun, 25 Feb 2007 01:17:56 -0500
+Action: delete-key FC8EA134
+Data: y

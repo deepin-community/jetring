@@ -1,0 +1,55 @@
+#!/bin/sh
+# Converts a keyring into a bunch of changesets, one per key.
+# Only intended to be used for initial import of keyring.
+set -e
+
+if [ -z "$1" ] || [ -z "$2" ]; then
+	echo "Usage: keyring-expode keyring changesetdir" >&2
+	exit 1
+fi
+
+# avoid gnupg touching ~/.gnupg
+GNUPGHOME=$(mktemp -d -t jetring.XXXXXXXX)
+export GNUPGHOME
+trap cleanup exit
+cleanup () {
+	rm -rf "$GNUPGHOME"
+}
+
+keyring=$(readlink -f "$1") # gpg works better with absolute keyring paths
+changesetdir="$2"
+
+basename=$(basename "$keyring")
+date=`date -R`
+
+if [ -n "$JETRING_SIGN" ] && [ -e "$changesetdir/index" ]; then
+	JETRING_SIGN=$(readlink -f "$JETRING_SIGN")
+	gpg --no-auto-check-trustdb --options /dev/null \
+		--no-default-keyring --keyring "$JETRING_SIGN" \
+		--verify "$changesetdir/index.gpg" "$changesetdir/index"
+fi
+
+mkdir -p "$changesetdir"
+touch "$changesetdir/index"
+
+# select the first fingerprint reported after each primary public key
+for key in $(gpg --fixed-list-mode --with-colons --with-fingerprint --no-auto-check-trustdb --options /dev/null --no-default-keyring --keyring "$keyring" --list-keys \
+                 | awk -F: '/^pub:/{ ready = 1; } /^fpr:/{ if (ready) { print $10; ready = 0; } }'); do
+	out="$changesetdir/add-$key"
+	echo "$out"
+	(
+		echo "Comment: extracted from $basename by jetring-explode"
+		echo "Date: $date"
+		echo "Action: import"
+		echo "Data:"
+		gpg --no-auto-check-trustdb --options /dev/null \
+			--no-default-keyring --keyring "$keyring" \
+			-a --export "$key" |
+			 sed 's/^/  /'
+	) > "$out"
+	echo "sha256-$(sha256sum "$out" | cut -d " " -f 1)  add-$key" >> "$changesetdir/index"
+done
+
+if [ -n "$JETRING_SIGN" ] || [ -e "$changesetdir/index.gpg" ]; then
+	jetring-signindex "$changesetdir"
+fi

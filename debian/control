@@ -1,0 +1,29 @@
+Source: jetring
+Section: utils
+Priority: optional
+Build-Depends:
+ debhelper-compat (= 12),
+ gnupg,
+Maintainer: Debian QA Group <packages@qa.debian.org>
+Standards-Version: 4.4.0
+Rules-Requires-Root: binary-targets
+Homepage: https://joeyh.name/code/jetring/
+Vcs-Git: https://salsa.debian.org/debian/jetring.git
+Vcs-Browser: https://salsa.debian.org/debian/jetring
+
+Package: jetring
+Architecture: all
+Depends:
+ gnupg,
+ ${misc:Depends},
+Multi-Arch: foreign
+Description: gpg keyring maintenance using changesets
+ jetring is a collection of tools that allow for gpg keyrings to be maintained
+ using changesets. It was developed with the Debian keyring in mind, and aims
+ to solve the problem that a gpg keyring is a binary blob that's hard for
+ multiple people to collaboratively edit.
+ .
+ With jetring, changesets can be submitted, reviewed to see exactly what they
+ will do, applied, and used to build a keyring. The origin of every change
+ made to the keyring is available for auditing, and gpg signatures can be used
+ to further secure things.

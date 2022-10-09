@@ -1,0 +1,97 @@
+#!/bin/sh
+# Creates a keyring from a set of changesets. Can run in incremental or
+# full build mode.
+set -e
+
+incremental=
+if [ "$1" = "-i" ]; then
+	shift 1
+	incremental=1
+elif [ "$1" = "-I" ]; then
+	shift 1
+	incremental=1
+	force=1
+fi
+
+if [ -z "$1" ] || [ -z "$2" ]; then
+	echo "Usage: jetring-build [-i] keyring changesetdir" >&2
+	exit 1
+fi
+
+# avoid gnupg touching ~/.gnupg
+GNUPGHOME=$(mktemp -d -t jetring.XXXXXXXX)
+export GNUPGHOME
+trap cleanup exit
+cleanup () {
+	rm -rf "$GNUPGHOME"
+}
+
+keyring=$(readlink -f "$1") # gpg works better with absolute keyring paths
+changesetdir="$2"
+
+if [ ! -e "$changesetdir/index" ]; then
+	echo "$changesetdir/index not found" >&2
+	exit 1
+fi
+
+if [ -s "$changesetdir/index" ]; then
+	jetring-checksum "$changesetdir"
+fi
+
+if [ -n "$JETRING_SIGN" ]; then
+	JETRING_SIGN=$(readlink -f "$JETRING_SIGN")
+	gpg --no-auto-check-trustdb --options /dev/null \
+		--no-default-keyring --keyring "$JETRING_SIGN" \
+		--verify "$changesetdir/index.gpg" "$changesetdir/index"
+fi
+
+if [ "$incremental" ]; then
+	if [ ! -e "$keyring.lastchangeset" ]; then
+		if [ ! "$force" ]; then
+			echo "$keyring.lastchangeset not found, cannot do incremental update" >&2
+			exit 1
+		else
+			incremental=
+		fi
+	else
+		if [ ! -e "$keyring" ]; then
+			if [ ! "$force" ]; then
+				echo "$keyring not found, cannot do incremental update" >&2
+			else
+				incremental=
+			fi
+		else
+			skiptil=$(cat $keyring.lastchangeset)
+			echo "Skipping forward past changeset $skiptil ..."
+		fi
+	fi
+else
+	if [ -e "$keyring" ]; then
+		echo "$keyring already exists, and not in incremental mode, not modifying" >&2
+		exit 1
+	fi
+fi
+touch "$keyring"
+
+for changeset in $(cut -d " " -f 3 "$changesetdir/index"); do
+	if [ -n "$skiptil" ]; then
+		if [ "$changeset" = "$skiptil" ]; then
+			skiptil=
+		fi
+		continue
+	fi
+	echo "Applying $changesetdir/$changeset ..."
+	if ! jetring-apply "$keyring" "$changesetdir/$changeset"; then
+		echo "Failed! Leaving keyring in $keyring.error" >&2
+		mv -f "$keyring" "$keyring.error"
+		exit 1
+	fi
+done
+
+if [ -n "$skiptil" ]; then
+	echo "Did not find last applied changeset, $skiptil, incremental update failed" >&2
+	exit 1
+fi
+
+echo "$changeset" > "$keyring.lastchangeset"
+echo "All changesets applied ok."

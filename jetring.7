@@ -1,0 +1,82 @@
+.\" -*- nroff -*-
+.TH JETRING 7 "" "" "jetring commands"
+.SH NAME
+jetring \- maintenance of gpg keyrings using changesets
+.SH OVERVIEW
+jetring is a collection of tools that allow for gpg keyrings to be maintained
+using changesets. It was developed with the Debian keyring in mind, and
+aims to solve the problem that a gpg keyring is a binary blob that's hard for
+multiple people to collaboratively edit.
+.PP
+With jetring, changesets can be submitted, reviewed to see exactly what they
+will do, applied, and used to build a keyring. The origin of every change
+made to the keyring is available for auditing, and gpg signatures can be used
+to further secure things.
+.SH OPERATION
+A jetring directory is used as the "source" that a keyring is built from.
+To convert an existing gpg keyring to such a directory, use the
+.BR jetring-explode (1)
+command.
+.PP
+Each change to the gpg keyring is stored in a separate changeset file in
+the directory. Changesets can reflect any set of changes to the keyring.
+Changesets can also include arbitrary metadata. The
+.BR jetring-gen (1)
+command can be used to compare two keyrings and generate a changeset from
+one to the other.
+.PP
+Changesets are never removed or modified, only new ones added, using
+the
+.BR jetring-accept (1)
+command.
+.BR 
+.PP
+There's an ordering of the changesets. This ordering is stored in an
+index file. The index file is only appended to, to add new changesets.
+.PP
+Changesets can be fully examined to see what change they make
+before applying them. The
+.BR jetring-review (1)
+and 
+.BR jetring-diff (1)
+commands can be used for such review.
+.PP
+To create a new keyring, or incrementally update an existing keyring,
+changesets are applied in order using the
+.BR jetring-build (1)
+command.
+.SH "GPG SIGNATURES"
+The index file can optionally be gpg signed (the signature will be stored
+in index.gpg); if JETRING_SIGN is set to point to a gpg keyring, then jetring
+commands that operate on the jetring directory will always check that the
+index file is signed with one of the keys from that keyring. Commands that
+modify the index file will update its signature.
+.SH "CHANGESET FORMAT"
+A changeset file consists of one or more stanzas, separated by blank lines.
+The stanzas are in RFC-822-like format. Each stanza must have an action
+field, which specifies which action to take on the keyring, and a data
+field, typically a multi-line field, which contains the data to feed to the
+action. Supported actions are:
+.TP
+.B import
+The data field should be an ascii-armored gpg key block, that is fed into
+gpg --import.
+.TP
+.B edit-key \fBkeyid\fR
+gpg --edit-key is run on the specified key id. The data field is a script,
+each line in it is passed in to gpg, the same as if gpg were being driven
+interactively. This can be used to make arbitrary
+changes to the key.
+.TP
+.B delete-key \fBkeyid\fR
+The given key is deleted. The data is fed into gpg --delete-key, and
+should be "y", since gpg expects that confirmation to deleting a key.
+.PP
+Other fields can be added as desired to hold metadata about the change.
+Typical additional fields include date, changed-by, and comment.
+.PP
+Changesets can be optionally have attached signatures, although such data
+is not automatically validated and is mostly useful to record who submitted
+or signed off on a given changeset.
+.SH AUTHOR
+Joey Hess, <joey@kitenet.net>.

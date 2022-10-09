@@ -1,0 +1,100 @@
+#!/usr/bin/perl
+# Applies a changeset to a keyring.
+use warnings;
+use strict;
+use File::Temp qw(tempdir);
+use Cwd q{abs_path};
+
+my @allowed_actions=qw(import edit-key delete-key);
+my @gpgopts=qw(--command-fd 0 --no-auto-check-trustdb --options /dev/null
+	--no-default-keyring --batch --yes);
+
+my $keyring=shift || usage();
+my $changeset=shift || usage();
+
+# avoid gnupg touching ~/.gnupg
+$ENV{GNUPGHOME}=tempdir("jetring.XXXXXXXXXX", TMPDIR => 1, CLEANUP => 1);
+
+$keyring=abs_path($keyring); # gpg works better with an absolute path
+
+push @gpgopts, "--keyring", $keyring;
+
+my $secring="secret-dummy.$$";
+sub END {
+	unlink $secring if defined $secring;
+	unlink $keyring."~" if defined $keyring;# gpg backup file
+}
+open (SECRET_DUMMY, ">$secring") || die "$secring: $!";
+close SECRET_DUMMY;
+push @gpgopts, "--secret-keyring", abs_path($secring);
+
+my %fields;
+my $field;
+open(CHANGESET, "<", $changeset) || die "$changeset: $!";
+while (<CHANGESET>) {
+	chomp;
+	if ($_ eq "-----BEGIN PGP SIGNED MESSAGE-----") {
+		<CHANGESET> for 1..2;
+		next;
+	}
+	elsif ($_ eq "-----BEGIN PGP SIGNATURE-----") {
+		last;
+	}
+	if (/^([^\s]+):(?:\s+(.*))?/) {
+		$field=lc $1;
+		if (defined $2) {
+			$fields{$field}=$2;
+		}
+		else {
+			$fields{$field}='';
+		}
+	}
+	elsif (/^\s+(.*)/ && defined $field) {
+		$fields{$field}.="\n" if length $fields{$field};
+		$fields{$field}.=$1;
+	}
+	elsif ($_ eq "") {
+		process() if defined $field;
+		%fields=();
+		$field=undef;
+	}
+	else {
+		die "parse error on line $. of $changeset";
+	}
+}
+close CHANGESET;
+process() if defined $field;
+
+sub process {
+	if (! exists $fields{action}) {
+		die "$changeset missing action field";
+	}
+	my @action=split(' ', $fields{action});
+	my $command=shift @action;
+	if (! grep { $_ eq $command } @allowed_actions) {
+		die "$changeset contains disallowed action \"$command\"";
+	}
+	if (! exists $fields{data}) {
+		die "$changeset missing data field";
+	}
+
+	print "gpg --$command @action\n";
+	my $pid = open(GPG, "|-");
+	$SIG{PIPE} = 'IGNORE';
+	if (! $pid) {
+		exec("gpg", @gpgopts, "--$command", @action) ||
+			die("failed to run gpg");
+	}
+	$|=1;
+	GPG->autoflush(1);
+	foreach my $line (split("\n", $fields{data})) {
+		print ">> $line\n" if $command ne 'import';
+		print GPG "$line\n" || die "failed talking to gpg";
+	}
+	close GPG || die "gpg exited nonzero";
+	print "gpg operation complete\n\n";
+}
+
+sub usage {
+	die "Usage: jetring-apply keyring changeset\n"; 
+}

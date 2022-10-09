@@ -1,0 +1,21 @@
+.\" -*- nroff -*-
+.TH JETRING-SIGNINDEX 1 "" "" "jetring commands"
+.SH NAME
+jetring-signindex \- gpg sign an index file
+.SH SYNOPSIS
+.B jetring-signindex dir
+.SH DESCRIPTION
+This command uses gpg to sign the dir/index file. 
+.P
+This is a low-level command, that is run by higher-level commands in
+jetring. Any jetring command that modifies a jetring directory and needs to
+add a changeset to its index file, will run jetring-signindex at the end,
+if the index file was previously signed, or if JETRING_SIGN is set.
+.P
+So nornally, you don't need to call this command by hand, though it can be
+useful when first creating a changeset directory, to force the index file
+to get signed.
+.SH AUTHOR 
+Joey Hess, <joey@kitenet.net>.
+.SH "SEE ALSO"
+.BR jetring (7)

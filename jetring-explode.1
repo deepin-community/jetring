@@ -1,0 +1,15 @@
+.\" -*- nroff -*-
+.TH JETRING-EXPLODE 1 "" "" "jetring commands"
+.SH NAME
+jetring-explode \- import a keyring into a list of changesets
+.SH SYNOPSIS
+.B jetring-explode keyring.gpg dir
+.SH DESCRIPTION
+Takes an existing keyring and explodes it to a collecton of changesets
+in the specified jetring directory, and adds them to the dir/index file.
+Only intended to be used when importing existing keyrings into jetring.
+.SH AUTHOR 
+Joey Hess, <joey@kitenet.net>.
+.SH "SEE ALSO"
+.BR jetring (7)
+.BR jetring-gen (1)

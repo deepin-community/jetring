@@ -1,0 +1,24 @@
+.\" -*- nroff -*-
+.TH JETRING-REVIEW 1 "" "" "jetring commands"
+.SH NAME
+jetring-review \- review a changeset to a keyring
+.SH SYNOPSIS
+.B jetring-review [-d] keyring.gpg changeset
+.SH DESCRIPTION
+Given an existing gpg keyring file and a changeset, shows what gpg would do
+if it applied the changeset to the keyring. The keyring is not modified.
+.PP
+Syntax is the same as jetring-apply, and except for not modifying the
+keyring, it behaves the same.
+.SH OPTIONS
+.TP
+.B -d
+Also run jetring-diff to show a diff of the changes the changeset would
+make the the keyring.
+.SH AUTHOR 
+Joey Hess, <joey@kitenet.net>.
+.SH "SEE ALSO"
+.BR jetring (7)
+.BR jetring-review (1)
+.BR jetring-apply (1)
+.BR jetring-diff (1)
